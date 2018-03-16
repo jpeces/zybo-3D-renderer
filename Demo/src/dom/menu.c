@@ -38,7 +38,6 @@
 #include "controls.h"
 #include "statusbar.h"
 
-#include "color.h"
 #include "mathmin.h"
 #include "state_machine.h"
 
@@ -250,31 +249,21 @@ void MENU_applyOption(void) {
 *******************************************************************************
 **/
 void MENU_drawMenu(void) {
-	color_t color;
-	float posX, posY;
 	int i;
-
-	int OPTION_OFFSET = 30;
-
-	posX = 50;
-	posY = 50;
-
-	color = Color(0,255,0);
-
+	float ypos = YPOS;
 
 	for(i=0; i< N_MENU_OPTION; i++){
-		menu_options[i].pos = Vec2(posX, posY);
-		DISPLAY_printString(menu_options[i].p_str, &menu_options[i].pos, &color);
-		posY += OPTION_OFFSET;
+		menu_options[i].pos = Vec2(XPOS, ypos);
+		DISPLAY_printString(menu_options[i].p_str, &menu_options[i].pos, &MENU_COLOR);
+		ypos += OPTION_OFFSET;
 	}
 
-
 	/* draw the pointer to the option selected: g_optionSelected */
-	DISPLAY_drawSelector(&menu_options[g_optionSelected-1].pos, 15, 7, &color);
+	DISPLAY_drawSelector(&menu_options[g_optionSelected-1].pos, 15, 7, &MENU_COLOR);
 
 	/* draw the the option applied: g_optionApplied */
 	int size = (strlen(menu_options[g_optionApplied-1].p_str)*8) + 5;
-	DISPLAY_drawApplied(&menu_options[g_optionApplied-1].pos, size, 17, &color);
+	DISPLAY_drawApplied(&menu_options[g_optionApplied-1].pos, size, 17, &MENU_COLOR);
 }
 
 /**

@@ -34,15 +34,19 @@
 **             			MODULES USED                           			 	 **
 ******************************************************************************/
 #include "new_types.h"
+#include "color.h"
 
 /******************************************************************************
 **                     	DEFINITIONS AND MACROS                           	 **
 ******************************************************************************/
 
-/**
- * @todo future visual menu defines
- */
+/* MENU GRAPHICS */
+#define XPOS					(float)50
+#define YPOS					(float)50
+#define OPTION_OFFSET  			(float)30
+#define MENU_COLOR				(color_t){0, 255, 0}
 
+/* MENU LOGIC */
 #define N_MENU_OPTION 			5
 
 #define BTN_MENU_FORWARD		0x1
