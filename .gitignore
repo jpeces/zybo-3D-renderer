@@ -1,0 +1,10 @@
+.metadata/
+_doc/html/
+zybo_bsp/
+RemoteSystemsTempFiles/
+Demo/Debug/
+Demo/.cproject
+Demo/.project
+*.ld
+*.spec
+*.log
