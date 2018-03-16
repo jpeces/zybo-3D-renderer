@@ -46,7 +46,7 @@
 #define N_MENU_OPTION 			5
 
 #define BTN_MENU_FORWARD		0x1
-#define BTN_MENU_BACKWARD		0x4
+#define BTN_MENU_BACKWARD		0x2
 #define BTN_MENU_APPLY			0x8
 
 #define MENU_NEXT				1
