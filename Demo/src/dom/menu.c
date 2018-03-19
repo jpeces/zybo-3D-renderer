@@ -213,7 +213,7 @@ void MENU_selectOption(int inc) {
 	if(g_optionSelected > N_MENU_OPTION){
 		g_optionSelected = START_TRACKING;
 	}
-	if(g_optionSelected < 0){
+	if(g_optionSelected <= 0){
 		g_optionSelected = QUIT;
 	}
 }
