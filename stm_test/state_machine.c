@@ -1,13 +1,12 @@
 /**
 *******************************************************************************
 **
-**  @file               statusbar.c
-**  @brief              Statusbar module implementation for log visualization
+**  @file               state_machine.c
+**  @brief              File description
 **  @par				Detail description
-**						...
 **
 **  @version            0.1.0
-**  @date               2018-01-18
+**  @date               2017-12-10
 **
 *******************************************************************************
 **
@@ -20,35 +19,26 @@
 **  @par
 **  Version  | Date        | Revised by        | Description
 **  -------- | ----------- | ----------------- | -----------------------------
-** 	0.1.0    | 2018-01-18  | Javier Peces	   | File creation
+** 	0.1.0    | 2017-12-10  | Javier Peces	   | File creation
 **
 *******************************************************************************
 **/
 
 
-#define STATUSBAR_C_
+
+#define STATE_MACHINE_C_
 
 
 /******************************************************************************
 **             			MODULES USED                           			 	 **
 ******************************************************************************/
-#include "statusbar.h"
-#include "new_types.h"
-#include "display.h"
-#include "sd.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "state_machine.h"
 
 
 /******************************************************************************
 **						DEFINITIONS AND MACROS                          	 **
 ******************************************************************************/
-#define STATUSBAR_WIDTH				0
-#define STATUSBAR_HEIGHT			0
 
-#define LOGFILE_NAME				"../log.txt"
 
 /******************************************************************************
 **                      TYPEDEFS AND STRUCTURES                              **
@@ -58,74 +48,61 @@
 /******************************************************************************
 **                      PROTOTYPES OF LOCAL FUNCTIONS                        **
 ******************************************************************************/
-void STATUSBAR_printMsg(char *str);
+void STM_executeState(STM_STATE *state , STM_MACHINE *machine);
 
 /******************************************************************************
 **                     	GLOBAL VARIABLES                                 	 **
 ******************************************************************************/
-char *p_status = NULL;
-static vec2_t g_pos = {50, 550};
-static color_t g_color = {0, 255, 0};
-Logger g_logger;
+
 
 /******************************************************************************
 **                      PUBLIC FUNCTIONS                                     **
 ******************************************************************************/
-/**
-*******************************************************************************
-* @brief   STATUSBAR_init
-* @par 	   Detail description
-*              ...
-*
-* @param       Empty
-* @return      None
-*******************************************************************************
-**/
-void STATUSBAR_init(void) {
-	g_logger = initLogger(STATUSBAR_printMsg);
-}
+void STM_execute(STM_MACHINE *machine)
+ {
+	STM_STATE **state;    /* tracking index value */
 
-/**
-*******************************************************************************
-* @brief   STATUSBAR_update
-* @par 	   Detail description
-*              ...
-*
-* @param       Empty
-* @return      None
-*******************************************************************************
-**/
-void STATUSBAR_update(void) {
-	/* update statusbar drawing */
-	DISPLAY_drawStatusBar(&g_pos, STATUSBAR_WIDTH, STATUSBAR_HEIGHT, &g_color);
+	if (machine->StopCond())  return;
 
-	/* update status string */
-	g_logger.log(p_status);
-}
-
-void STATUSBAR_setStatus(char *status, LoggerLevel level) {
-	p_status = status;
-	g_logger.setLevel(&g_logger, level);
+	for (state = machine->state; *state != NULL; ++state)
+	{
+		if (machine->id_act_st == (*state)->id)
+		{
+			STM_executeState(*state , machine);
+			return;
+		}
+	}
+ }
 
 
-}
+ void STM_executeState(STM_STATE *state , STM_MACHINE *machine)
+ {
+ 	STM_EVEACC *Indx;   /* tracking index value */
+
+ 	(*state->controls)();
+
+ 	for (Indx = state->transitions; Indx->event != NULL; ++Indx)
+ 	{
+ 		if (Indx->event() == TRUE)
+ 		{
+ 			if (Indx->action != NULL)
+ 			{
+ 				Indx->action();
+ 			}
+ 			if (Indx->next_id != machine->id_act_st)
+ 			{
+ 				machine->id_act_st = Indx->next_id;
+ 				return;
+ 			}
+
+ 		}
+ 	}
+ }
 
 /******************************************************************************
 **                      LOCAL FUNCTIONS                                  	 **
 ******************************************************************************/
-void STATUSBAR_printMsg(char *str) {
-	char *msg = (char *) malloc(1 + strlen(g_logger.levelMsg) + strlen(str));
-	strcpy(msg, g_logger.levelMsg);
-	strcat(msg, str);
 
-	/* save a status bar log */
-	SD_saveInSD(msg, LOGFILE_NAME);
-
-	/* print the message on the screen */
-	DISPLAY_printString(msg, &g_pos, &g_color);
-
-	free(msg);
-}
 
 /******************************************************************************
 **                      EOF				                                     **
