@@ -35,6 +35,7 @@
 #include "statusbar.h"
 #include "new_types.h"
 #include "display.h"
+#include "sd.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -46,6 +47,8 @@
 ******************************************************************************/
 #define STATUSBAR_WIDTH				0
 #define STATUSBAR_HEIGHT			0
+
+#define LOGFILE_NAME				"../log.txt"
 
 /******************************************************************************
 **                      TYPEDEFS AND STRUCTURES                              **
@@ -115,6 +118,10 @@ void STATUSBAR_printMsg(char *str) {
 	strcpy(msg, g_logger.levelMsg);
 	strcat(msg, str);
 
+	/* save a status bar log */
+	SD_saveInSD(msg, LOGFILE_NAME);
+
+	/* print the message on the screen */
 	DISPLAY_printString(msg, &g_pos, &g_color);
 
 	free(msg);
