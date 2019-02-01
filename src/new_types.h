@@ -58,6 +58,7 @@ typedef unsigned char bool_t;
 typedef unsigned char byte_t;
 
 
+
 #endif /* NEW_TYPES_H_ */
 
 /******************************************************************************
