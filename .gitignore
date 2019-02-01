@@ -2,9 +2,9 @@
 _doc/html/
 zybo_bsp/
 RemoteSystemsTempFiles/
-Demo/Debug/
-Demo/.cproject
-Demo/.project
+demo/Debug/
+demo/.cproject
+demo/.project
 *.ld
 *.spec
 *.log
