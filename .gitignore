@@ -8,3 +8,4 @@ demo/.project
 *.ld
 *.spec
 *.log
+*.html
